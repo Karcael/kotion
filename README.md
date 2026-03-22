@@ -1,51 +1,56 @@
 # Kotion
 
-A self-hosted Notion alternative built with Next.js. Write, organize, and collaborate on your notes without relying on third-party services.
+A self-hosted Notion alternative built with Next.js. Write, organize, and share your notes without relying on third-party services. Runs entirely in Docker on your own server.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-336791)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)
+![Version](https://img.shields.io/badge/Version-1.2-green)
 
 ## Features
 
-### Editor
-- **Block-based editor** powered by Tiptap with slash commands (`/`)
-- **Rich text formatting** — bold, italic, underline, strikethrough, code, highlight, links
-- **Block types** — headings, bullet lists, numbered lists, task lists, code blocks, quotes, tables, images, dividers
-- **Multi-column layouts** — split content into 2, 3, or 4 columns (responsive on mobile)
-- **Drag & drop** — reorder blocks with grab handles
-- **Floating toolbar** — formatting options appear on text selection
-- **Table editing** — add/remove rows and columns with a floating toolbar
-- **Image upload** — drag & drop or URL, for both inline images and page covers/icons
-- **Syntax highlighting** — code blocks with language detection
-- **Auto-save** — changes are saved automatically with debounce
+### Block Editor
+- Slash commands (`/`) with 15+ block types
+- Rich text: bold, italic, underline, strikethrough, code, highlight, links
+- Headings, bullet lists, numbered lists, task lists (with nesting)
+- Code blocks with syntax highlighting
+- Tables with add/remove rows & columns toolbar
+- Multi-column layouts (2, 3, 4 columns — responsive on mobile)
+- Image upload (drag & drop or URL) for inline images, covers, and icons
+- Page link blocks — embed clickable links to other pages inside notes
+- Drag & drop block reordering with grab handles
+- Floating formatting toolbar on text selection
+- Auto-save with debounce
 
 ### Organization
-- **Page hierarchy** — unlimited nesting with tree navigation in the sidebar
-- **Page icons** — emoji or custom image icons
-- **Cover images** — full-width header images
-- **Favorites** — pin frequently used pages
-- **Trash & restore** — soft delete with recovery
-- **Search** — find pages instantly with `Ctrl+K` / `Cmd+K`
+- Nested page hierarchy with sidebar tree navigation
+- Page icons (emoji or custom image)
+- Cover images
+- Favorites
+- Trash & restore (soft delete)
+- Search (`Ctrl+K` / `Cmd+K`)
 
-### Collaboration
-- **Share via email** — invite people with Editor or Viewer roles
-- **Invitation system** — accept/decline with in-app notifications
-- **Access control** — Owner, Editor, Viewer permissions with parent-chain inheritance
-- **Live sync** — see collaborator changes without page refresh (polling-based)
+### Sharing & Collaboration
+- Share pages via email with Editor or Viewer roles
+- Invitation system with in-app accept/decline notifications
+- Access control: Owner, Editor, Viewer permissions (inherited through parent pages)
+- Live content sync between collaborators (polling-based, no page refresh needed)
+- Cancel pending invitations
+- Shared pages section in sidebar
 
 ### Design
-- **Dark & light mode** — system-aware with manual toggle
-- **Responsive** — works on desktop, tablet, and mobile
-- **Notion-inspired UI** — clean, minimal design with smooth animations
+- Dark & light mode (system-aware)
+- Responsive design (desktop, tablet, mobile)
+- Notion-inspired minimal UI with smooth animations
+- Custom Kotion logo and favicon (auto dark/light mode)
 
 ### Security
-- **JWT authentication** — HTTP-only cookies, 7-day expiry
-- **Password hashing** — bcrypt with salt rounds
-- **File validation** — type and size checks on uploads
-- **Path traversal protection** — secure file serving
-- **Owner-only actions** — delete, archive, and publish restricted to page owners
+- JWT authentication with HTTP-only cookies
+- bcrypt password hashing
+- File type and size validation on uploads
+- Path traversal protection on file serving
+- Role-based access control (owner-only delete, archive, publish)
 
 ## Tech Stack
 
@@ -58,44 +63,33 @@ A self-hosted Notion alternative built with Next.js. Write, organize, and collab
 | Styling | Tailwind CSS 4 |
 | Auth | JWT (jose + bcryptjs) |
 | State | Zustand |
-| Deployment | Docker |
+| Deployment | Docker Compose |
 
-## Quick Start
-
-### Docker (Recommended)
+## Quick Start with Docker
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/kotion.git
+git clone https://github.com/Karcael/kotion.git
 cd kotion
 
-# Configure environment
 cp .env.example .env
-# Edit .env — change JWT_SECRET for production!
+# Edit .env — change JWT_SECRET and NEXT_PUBLIC_APP_URL
 
-# Start
 docker-compose up -d --build
-
-# Access at http://localhost:3000
 ```
 
-### Local Development
+The app will be available at `http://localhost:3000`. Connect Cloudflare Tunnel, Nginx, or Traefik to expose via HTTPS with a custom domain.
+
+## Local Development
 
 **Prerequisites:** Node.js 22+, PostgreSQL 17+
 
 ```bash
-# Install dependencies
 npm install
-
-# Set up database
 cp .env.example .env
 # Edit .env with your DATABASE_URL
+
 npx prisma db push
-
-# Start development server
 npm run dev
-
-# Access at http://localhost:3000
 ```
 
 ## Environment Variables
@@ -103,31 +97,32 @@ npm run dev
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://kotion:kotion@localhost:5432/kotion` |
-| `JWT_SECRET` | Secret key for JWT signing | Must change in production |
-| `NEXT_PUBLIC_APP_URL` | Public URL of the application | `http://localhost:3000` |
-| `APP_PORT` | External port for Docker | `3000` |
+| `JWT_SECRET` | Secret key for JWT signing | **Must change in production** |
+| `NEXT_PUBLIC_APP_URL` | Public URL of the app | `http://localhost:3000` |
+| `APP_PORT` | External Docker port | `3000` |
 
 ## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── (auth)/              # Login & register pages
-│   ├── (main)/documents/    # Main app with editor
+│   ├── (auth)/              Login & register
+│   ├── (main)/documents/    Main app with editor
 │   └── api/
-│       ├── auth/            # Authentication endpoints
-│       ├── documents/       # CRUD + collaborators
-│       ├── invitations/     # Sharing system
-│       ├── search/          # Full-text search
-│       ├── upload/          # File uploads
-│       └── files/           # File serving
+│       ├── auth/            Authentication
+│       ├── documents/       CRUD + collaborators
+│       ├── invitations/     Sharing system
+│       ├── search/          Full-text search
+│       ├── upload/          File uploads
+│       └── files/           File serving
 ├── components/
-│   ├── editor/              # Tiptap editor + extensions
-│   ├── sidebar/             # Navigation tree
-│   └── ...                  # UI components
-├── hooks/                   # Custom React hooks
-├── lib/                     # Auth, Prisma, utilities
-└── stores/                  # Zustand state stores
+│   ├── editor/              Tiptap editor + extensions
+│   │   └── extensions/      Custom: columns, page-link, drag-handle
+│   ├── sidebar/             Navigation tree + sharing UI
+│   └── ...                  UI components
+├── hooks/                   Custom React hooks
+├── lib/                     Auth, Prisma, access control
+└── stores/                  Zustand state
 ```
 
 ## Docker Architecture
@@ -137,21 +132,19 @@ docker-compose up -d --build
 
   ┌─────────────────────────────────────┐
   │  postgres (PostgreSQL 17)           │
-  │  Volume: postgres-data              │
+  │  Volume: postgres-data (persistent) │
   └──────────────┬──────────────────────┘
                  │
   ┌──────────────┴──────────────────────┐
   │  app (Next.js standalone)           │
   │  Port: ${APP_PORT:-3000}            │
-  │  Volume: uploads                    │
+  │  Volume: uploads (persistent)       │
   │                                     │
-  │  On startup:                        │
+  │  Startup:                           │
   │  1. prisma db push (auto-migrate)   │
   │  2. node server.js                  │
   └─────────────────────────────────────┘
 ```
-
-Connect with **Cloudflare Tunnel**, Nginx, or Traefik to expose via HTTPS.
 
 ## Scripts
 
@@ -162,7 +155,3 @@ Connect with **Cloudflare Tunnel**, Nginx, or Traefik to expose via HTTPS.
 | `npm run start` | Start production server |
 | `npm run db:push` | Push schema to database |
 | `npm run db:studio` | Open Prisma Studio |
-
-## License
-
-MIT
