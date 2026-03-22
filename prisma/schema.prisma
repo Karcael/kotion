@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum CollaboratorRole {
+  VIEWER
+  EDITOR
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  image     String?
+
+  documents           Document[]
+  sentInvitations     Invitation[]   @relation("SentInvitations")
+  receivedInvitations Invitation[]   @relation("ReceivedInvitations")
+  collaborations      Collaborator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Document {
+  id          String  @id @default(cuid())
+  title       String  @default("Adsız")
+  content     Json?
+  icon        String?
+  coverImage  String?
+  isArchived  Boolean @default(false)
+  isFavorite  Boolean @default(false)
+  isPublished Boolean @default(false)
+
+  parentId String?
+  parent   Document?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: SetNull)
+  children Document[] @relation("ParentChild")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  invitations   Invitation[]
+  collaborators Collaborator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([parentId])
+  @@index([userId, isArchived])
+}
+
+model Invitation {
+  id     String           @id @default(cuid())
+  email  String
+  role   CollaboratorRole @default(EDITOR)
+  status InvitationStatus @default(PENDING)
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  inviterId String
+  inviter   User   @relation("SentInvitations", fields: [inviterId], references: [id], onDelete: Cascade)
+
+  inviteeId String?
+  invitee   User?  @relation("ReceivedInvitations", fields: [inviteeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([documentId, email])
+  @@index([email, status])
+  @@index([inviteeId, status])
+}
+
+model Collaborator {
+  id   String           @id @default(cuid())
+  role CollaboratorRole @default(EDITOR)
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([documentId, userId])
+  @@index([userId])
+}
