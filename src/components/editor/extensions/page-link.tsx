@@ -1,4 +1,28 @@
+"use client"
+
 import { Node, mergeAttributes } from "@tiptap/core"
+import { ReactNodeViewRenderer, NodeViewWrapper, type ReactNodeViewProps } from "@tiptap/react"
+import { PageIcon } from "@/components/page-icon"
+
+function PageLinkView({ node }: ReactNodeViewProps) {
+  const { pageId, title, icon } = node.attrs
+
+  return (
+    <NodeViewWrapper data-type="page-link" className="page-link-block">
+      <a
+        href={`/documents/${pageId}`}
+        className="page-link-inner"
+        data-page-navigate={pageId}
+      >
+        <span className="page-link-icon">
+          <PageIcon icon={icon} size={18} />
+        </span>
+        <span className="page-link-title">{title || "Adsız"}</span>
+        <span className="page-link-arrow">{"\u2192"}</span>
+      </a>
+    </NodeViewWrapper>
+  )
+}
 
 export const PageLink = Node.create({
   name: "pageLink",
@@ -22,7 +46,7 @@ export const PageLink = Node.create({
 
     // İkon: emoji veya fallback metin
     const iconContent =
-      icon && !icon.startsWith("/") && !icon.startsWith("http")
+      icon && !icon.startsWith("/") && !icon.startsWith("http") && !icon.startsWith("lucide:")
         ? icon
         : "📄"
 
@@ -58,5 +82,9 @@ export const PageLink = Node.create({
         ["span", { class: "page-link-arrow" }, "\u2192"],
       ],
     ]
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(PageLinkView)
   },
 })
