@@ -5,6 +5,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json* ./
+COPY prisma ./prisma/
 RUN npm ci --legacy-peer-deps
 
 # ------- Uygulamayı derle -------
@@ -59,4 +60,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["sh", "-c", "prisma db push --schema=./prisma/schema.prisma --skip-generate --accept-data-loss && node server.js"]
+CMD ["sh", "-c", "prisma db push --schema=./prisma/schema.prisma --url $DATABASE_URL --accept-data-loss && node server.js"]
