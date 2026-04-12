@@ -7,7 +7,7 @@ export async function GET() {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Oturum bulunamadı" },
+        { error: "Oturum bulunamadı." },
         { status: 401 }
       )
     }
@@ -16,7 +16,7 @@ export async function GET() {
   } catch (error) {
     console.error("Session error:", error)
     return NextResponse.json(
-      { error: "Oturum kontrolü sırasında bir hata oluştu" },
+      { error: "Oturum kontrolü sırasında bir hata oluştu." },
       { status: 500 }
     )
   }

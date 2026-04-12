@@ -9,7 +9,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { invitationId } = await params
@@ -17,7 +17,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     if (!["ACCEPTED", "DECLINED"].includes(status)) {
       return NextResponse.json(
-        { error: "Geçersiz durum. ACCEPTED veya DECLINED olmalı" },
+        { error: "Geçersiz durum. ACCEPTED veya DECLINED olmalı." },
         { status: 400 }
       )
     }
@@ -32,7 +32,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     if (!invitation) {
       return NextResponse.json(
-        { error: "Davet bulunamadı" },
+        { error: "Davet bulunamadı." },
         { status: 404 }
       )
     }
@@ -70,7 +70,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Update invitation error:", error)
     return NextResponse.json(
-      { error: "Davet güncellenirken bir hata oluştu" },
+      { error: "Davet güncellenirken bir hata oluştu." },
       { status: 500 }
     )
   }
@@ -81,7 +81,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { invitationId } = await params
@@ -96,7 +96,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     if (!invitation) {
       return NextResponse.json(
-        { error: "Davet bulunamadı veya iptal edilemez" },
+        { error: "Davet bulunamadı veya iptal edilemez." },
         { status: 404 }
       )
     }
@@ -109,7 +109,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Delete invitation error:", error)
     return NextResponse.json(
-      { error: "Davet iptal edilirken bir hata oluştu" },
+      { error: "Davet iptal edilirken bir hata oluştu." },
       { status: 500 }
     )
   }

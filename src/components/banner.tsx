@@ -22,18 +22,18 @@ export function Banner({ documentId, onRestore }: BannerProps) {
 
     try {
       await fetch(`/api/documents/${documentId}`, { method: "DELETE" })
-      toast.success("Sayfa kalıcı olarak silindi")
+      toast.success("Sayfa kalıcı olarak silindi.")
       refresh()
       router.push("/documents")
     } catch {
-      toast.error("Silme başarısız")
+      toast.error("Silme başarısız.")
     }
   }
 
   return (
     <div className="flex w-full items-center justify-center gap-3 bg-destructive/90 px-4 py-2.5 text-sm text-destructive-foreground backdrop-blur-sm">
       <AlertTriangle className="h-4 w-4" />
-      <p className="font-medium">Bu sayfa çöp kutusunda</p>
+      <p className="font-medium">Bu sayfa çöp kutusunda.</p>
       <button
         onClick={onRestore}
         className="ml-2 inline-flex items-center gap-1.5 rounded-lg bg-white/20 px-3 py-1 text-xs font-medium transition-colors hover:bg-white/30"

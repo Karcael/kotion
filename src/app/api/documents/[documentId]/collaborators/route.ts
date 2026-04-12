@@ -10,7 +10,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { documentId } = await params
@@ -18,7 +18,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
     if (!access) {
       return NextResponse.json(
-        { error: "Doküman bulunamadı" },
+        { error: "Doküman bulunamadı." },
         { status: 404 }
       )
     }
@@ -50,7 +50,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("List collaborators error:", error)
     return NextResponse.json(
-      { error: "İşbirlikçiler alınırken bir hata oluştu" },
+      { error: "İşbirlikçiler alınırken bir hata oluştu." },
       { status: 500 }
     )
   }
@@ -61,7 +61,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { documentId } = await params
@@ -70,7 +70,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     if (!targetUserId) {
       return NextResponse.json(
-        { error: "Kaldırılacak kullanıcı ID gerekli" },
+        { error: "Kaldırılacak kullanıcı ID gerekli." },
         { status: 400 }
       )
     }
@@ -82,7 +82,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     if (!document) {
       return NextResponse.json(
-        { error: "Yetkiniz yok" },
+        { error: "Yetkiniz yok." },
         { status: 403 }
       )
     }
@@ -106,7 +106,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Remove collaborator error:", error)
     return NextResponse.json(
-      { error: "İşbirlikçi kaldırılırken bir hata oluştu" },
+      { error: "İşbirlikçi kaldırılırken bir hata oluştu." },
       { status: 500 }
     )
   }

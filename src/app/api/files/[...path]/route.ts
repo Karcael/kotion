@@ -16,7 +16,7 @@ export async function GET(
     // Dizin geçiş saldırısını önle
     if (!filePath.startsWith(resolve(UPLOAD_DIR))) {
       return NextResponse.json(
-        { error: "Erişim reddedildi" },
+        { error: "Erişim reddedildi." },
         { status: 403 }
       )
     }
@@ -24,7 +24,7 @@ export async function GET(
     const fileStat = await stat(filePath)
     if (!fileStat.isFile()) {
       return NextResponse.json(
-        { error: "Dosya bulunamadı" },
+        { error: "Dosya bulunamadı." },
         { status: 404 }
       )
     }
@@ -49,7 +49,7 @@ export async function GET(
     })
   } catch {
     return NextResponse.json(
-      { error: "Dosya bulunamadı" },
+      { error: "Dosya bulunamadı." },
       { status: 404 }
     )
   }

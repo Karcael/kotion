@@ -6,17 +6,17 @@ A self-hosted Notion alternative built with Next.js. Write, organize, and share 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-336791)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)
-![Version](https://img.shields.io/badge/Version-1.3.2-green)
+![Version](https://img.shields.io/badge/Version-1.4.0-green)
 
 ## Features
 
 ### Block Editor
-- Slash commands (`/`) with 15+ block types and keyboard navigation
+- Slash commands (`/`) with 15+ block types and keyboard navigation (works inside columns too)
 - Rich text: bold, italic, underline, strikethrough, code, highlight, links
 - Headings, bullet lists, numbered lists, task lists (with nesting via Tab/Shift+Tab)
-- Code blocks with syntax highlighting
-- Tables with floating toolbar (add/remove rows & columns)
-- Multi-column layouts (2, 3, 4 columns — responsive on mobile/tablet)
+- Code blocks with syntax highlighting, language selector (24 languages), and copy button
+- Tables with floating toolbar: add/remove rows & columns, horizontal & vertical cell alignment, header row toggle, zebra-striped rows, column resize, row height resize, delete confirmation modal. Tables expand to full page width with horizontal scroll for wide content
+- Multi-column layouts (2, 3, 4 columns — responsive on mobile/tablet) with draggable column width resizing and full page width
 - Image upload (drag & drop or URL) for inline images, covers, and page icons
 - Page link blocks — embed navigable links to any page (including sub-pages)
 - Drag & drop block reordering with grab handles
@@ -30,6 +30,12 @@ A self-hosted Notion alternative built with Next.js. Write, organize, and share 
 - 500+ emojis across 10 categories
 - Custom image upload as page icon
 - Unified icon rendering across sidebar, search, invitations, and page links
+
+### Templates
+- 20 page templates across 5 categories: Work, Personal, Planning, Education, Creative
+- Templates include: Meeting Notes, Project Plan, Weekly Report, Retrospective, Product Requirements, Daily Journal, Goals, Habit Tracker, Reading List, To-Do List, Weekly Planner, Travel Plan, Budget, Event Planning, Study Notes, Research Notes, Cornell Notes, Blog Post, Brainstorm, SWOT Analysis
+- Category filtering on the welcome page
+- Each template pre-fills with structured content (headings, tables, task lists, columns)
 
 ### Organization
 - Nested page hierarchy with sidebar tree navigation
@@ -129,7 +135,7 @@ src/
 │       └── files/           File serving
 ├── components/
 │   ├── editor/              Tiptap editor + toolbars
-│   │   └── extensions/      Custom: columns, page-link
+│   │   └── extensions/      Custom: columns, page-link, table cell/header/row
 │   ├── sidebar/             Navigation tree + sharing UI
 │   └── ...                  UI components (icon picker, share dialog, etc.)
 ├── hooks/                   Custom React hooks

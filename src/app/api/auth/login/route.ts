@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: "E-posta ve şifre gereklidir" },
+        { error: "E-posta ve şifre gereklidir." },
         { status: 400 }
       )
     }
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Geçersiz e-posta veya şifre" },
+        { error: "Geçersiz e-posta veya şifre." },
         { status: 401 }
       )
     }
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
     if (!isPasswordValid) {
       return NextResponse.json(
-        { error: "Geçersiz e-posta veya şifre" },
+        { error: "Geçersiz e-posta veya şifre." },
         { status: 401 }
       )
     }
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Login error:", error)
     return NextResponse.json(
-      { error: "Giriş sırasında bir hata oluştu" },
+      { error: "Giriş sırasında bir hata oluştu." },
       { status: 500 }
     )
   }

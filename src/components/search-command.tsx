@@ -109,7 +109,7 @@ export function SearchCommand() {
         <div className="max-h-72 overflow-y-auto p-1.5">
           {results.length === 0 && query && (
             <p className="px-4 py-8 text-center text-sm text-muted-foreground">
-              Sonuç bulunamadı
+              Sonuç bulunamadı.
             </p>
           )}
           {!query && (

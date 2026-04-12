@@ -7,21 +7,21 @@ export async function POST(request: Request) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { documentId, email, role = "EDITOR" } = await request.json()
 
     if (!documentId || !email) {
       return NextResponse.json(
-        { error: "Doküman ID ve e-posta gereklidir" },
+        { error: "Doküman ID ve e-posta gereklidir." },
         { status: 400 }
       )
     }
 
     if (email === user.email) {
       return NextResponse.json(
-        { error: "Kendinizi davet edemezsiniz" },
+        { error: "Kendinizi davet edemezsiniz." },
         { status: 400 }
       )
     }
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
     if (!document) {
       return NextResponse.json(
-        { error: "Doküman bulunamadı veya yetkiniz yok" },
+        { error: "Doküman bulunamadı veya yetkiniz yok." },
         { status: 404 }
       )
     }
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     if (existing) {
       if (existing.status === "ACCEPTED") {
         return NextResponse.json(
-          { error: "Bu kişi zaten işbirlikçi" },
+          { error: "Bu kişi zaten işbirlikçi." },
           { status: 409 }
         )
       }
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Create invitation error:", error)
     return NextResponse.json(
-      { error: "Davet gönderilirken bir hata oluştu" },
+      { error: "Davet gönderilirken bir hata oluştu." },
       { status: 500 }
     )
   }
@@ -89,7 +89,7 @@ export async function GET() {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const invitations = await prisma.invitation.findMany({
@@ -108,7 +108,7 @@ export async function GET() {
   } catch (error) {
     console.error("List invitations error:", error)
     return NextResponse.json(
-      { error: "Davetler alınırken bir hata oluştu" },
+      { error: "Davetler alınırken bir hata oluştu." },
       { status: 500 }
     )
   }

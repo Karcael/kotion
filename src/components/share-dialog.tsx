@@ -192,11 +192,11 @@ export function ShareDialog({ documentId, onClose }: ShareDialogProps) {
         return
       }
 
-      toast.success(`${email} adresine davet gönderildi`)
+      toast.success(`${email} adresine davet gönderildi.`)
       setEmail("")
       fetchCollaborators()
     } catch {
-      toast.error("Davet gönderilirken hata oluştu")
+      toast.error("Davet gönderilirken hata oluştu.")
     } finally {
       setSending(false)
     }
@@ -212,11 +212,11 @@ export function ShareDialog({ documentId, onClose }: ShareDialogProps) {
             { method: "DELETE" }
           )
           if (res.ok) {
-            toast.success(`${name} kaldırıldı`)
+            toast.success(`${name} kaldırıldı.`)
             fetchCollaborators()
           }
         } catch {
-          toast.error("Kaldırma başarısız")
+          toast.error("Kaldırma başarısız.")
         }
         setConfirmAction(null)
       },
@@ -232,11 +232,11 @@ export function ShareDialog({ documentId, onClose }: ShareDialogProps) {
             method: "DELETE",
           })
           if (res.ok) {
-            toast.success(`${invEmail} daveti iptal edildi`)
+            toast.success(`${invEmail} daveti iptal edildi.`)
             fetchCollaborators()
           }
         } catch {
-          toast.error("İptal başarısız")
+          toast.error("İptal başarısız.")
         }
         setConfirmAction(null)
       },

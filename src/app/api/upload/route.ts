@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const formData = await request.formData()
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     if (!file) {
       return NextResponse.json(
-        { error: "Dosya bulunamadı" },
+        { error: "Dosya bulunamadı." },
         { status: 400 }
       )
     }
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     // Dosya boyutu doğrulama (maks 5MB)
     if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "Dosya boyutu 5MB'dan büyük olamaz" },
+        { error: "Dosya boyutu 5MB'dan büyük olamaz." },
         { status: 400 }
       )
     }
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Upload error:", error)
     return NextResponse.json(
-      { error: "Dosya yüklenirken bir hata oluştu" },
+      { error: "Dosya yüklenirken bir hata oluştu." },
       { status: 500 }
     )
   }

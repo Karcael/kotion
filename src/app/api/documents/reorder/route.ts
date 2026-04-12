@@ -7,14 +7,14 @@ export async function PATCH(request: Request) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { orderedIds } = await request.json()
 
     if (!Array.isArray(orderedIds)) {
       return NextResponse.json(
-        { error: "orderedIds dizisi gerekli" },
+        { error: "orderedIds dizisi gerekli." },
         { status: 400 }
       )
     }
@@ -33,7 +33,7 @@ export async function PATCH(request: Request) {
   } catch (error) {
     console.error("Reorder error:", error)
     return NextResponse.json(
-      { error: "Sıralama güncellenirken hata oluştu" },
+      { error: "Sıralama güncellenirken hata oluştu." },
       { status: 500 }
     )
   }

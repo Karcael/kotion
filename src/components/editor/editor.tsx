@@ -14,7 +14,12 @@ import Link from "@tiptap/extension-link"
 import { TextStyle } from "@tiptap/extension-text-style"
 import Color from "@tiptap/extension-color"
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight"
-import { Table, TableRow, TableCell, TableHeader } from "@tiptap/extension-table"
+import { ReactNodeViewRenderer } from "@tiptap/react"
+import { CodeBlockComponent } from "./code-block-component"
+import { Table } from "@tiptap/extension-table"
+import { TableCellExtended } from "./extensions/table-cell-extended"
+import { TableHeaderExtended } from "./extensions/table-header-extended"
+import { TableRowExtended } from "./extensions/table-row-extended"
 import { common, createLowlight } from "lowlight"
 import { SlashCommand } from "./slash-command"
 import { BubbleMenuBar } from "./bubble-menu-bar"
@@ -22,6 +27,8 @@ import { TableMenu } from "./table-menu"
 import { ColumnsMenu } from "./columns-menu"
 import { Columns, Column } from "./extensions/columns"
 import { DragHandleReact } from "./drag-handle-react"
+import { TableRowResize } from "./table-row-resize"
+import { ColumnResize } from "./column-resize"
 import { PageLink } from "./extensions/page-link"
 import { ImageUploadDialog } from "@/components/image-upload-dialog"
 import { PageLinkDialog } from "@/components/page-link-dialog"
@@ -108,13 +115,17 @@ export function Editor({
       }),
       TextStyle,
       Color,
-      CodeBlockLowlight.configure({ lowlight }),
+      CodeBlockLowlight.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(CodeBlockComponent)
+        },
+      }).configure({ lowlight }),
       Columns,
       Column,
-      Table.configure({ resizable: true }),
-      TableRow,
-      TableCell,
-      TableHeader,
+      Table.configure({ resizable: true, cellMinWidth: 80 }),
+      TableRowExtended,
+      TableCellExtended,
+      TableHeaderExtended,
       PageLink,
       SlashCommand.configure({
         onImageRequest: (range: { from: number; to: number }) => {
@@ -141,72 +152,84 @@ export function Editor({
       onChangeRef.current?.(json)
     },
     onSelectionUpdate: ({ editor }) => {
-      const { from, to } = editor.state.selection
+      try {
+        const { from, to } = editor.state.selection
 
-      const inTable = editor.isActive("table")
-      setIsInTable(inTable)
+        const inTable = editor.isActive("table")
+        setIsInTable(inTable)
 
-      if (inTable) {
-        const { view } = editor
-        const domAtPos = view.domAtPos(from)
-        const tableEl =
-          (domAtPos.node as HTMLElement)?.closest?.("table") ||
-          (domAtPos.node.parentElement as HTMLElement)?.closest?.("table")
+        if (inTable) {
+          try {
+            const { view } = editor
+            const domAtPos = view.domAtPos(from)
+            const tableEl =
+              (domAtPos.node as HTMLElement)?.closest?.("table") ||
+              (domAtPos.node.parentElement as HTMLElement)?.closest?.("table")
 
-        if (tableEl) {
-          const rect = tableEl.getBoundingClientRect()
-          setTableMenuPos({
-            top: rect.top - 44,
-            left: rect.left + rect.width / 2,
-          })
+            if (tableEl) {
+              const rect = tableEl.getBoundingClientRect()
+              setTableMenuPos({
+                top: rect.top - 44,
+                left: rect.left + rect.width / 2,
+              })
+            }
+          } catch {
+            // Position may be invalid during table resize
+          }
+
+          if (from === to) {
+            setBubbleMenuPos(null)
+          }
+        } else {
+          setTableMenuPos(null)
         }
+
+        const { $from } = editor.state.selection
+        let inColumns = false
+        for (let depth = $from.depth; depth > 0; depth--) {
+          if ($from.node(depth).type.name === "columns") {
+            inColumns = true
+            try {
+              const { view } = editor
+              const domAtPos = view.domAtPos(from)
+              const columnsEl =
+                (domAtPos.node as HTMLElement)?.closest?.(".columns-layout") ||
+                (domAtPos.node.parentElement as HTMLElement)?.closest?.(
+                  ".columns-layout"
+                )
+
+              if (columnsEl) {
+                const rect = columnsEl.getBoundingClientRect()
+                setColumnsMenuPos({
+                  top: rect.top - 44,
+                  left: rect.left + rect.width / 2,
+                })
+              }
+            } catch {
+              // Position may be invalid during resize
+            }
+            break
+          }
+        }
+        setIsInColumns(inColumns)
+        if (!inColumns) setColumnsMenuPos(null)
 
         if (from === to) {
           setBubbleMenuPos(null)
+          return
         }
-      } else {
-        setTableMenuPos(null)
+
+        const { view } = editor
+        const start = view.coordsAtPos(from)
+        const end = view.coordsAtPos(to)
+
+        setBubbleMenuPos({
+          top: start.top - 50,
+          left: (start.left + end.left) / 2,
+        })
+      } catch {
+        // Ignore position errors during concurrent operations
       }
-
-      const { $from } = editor.state.selection
-      let inColumns = false
-      for (let depth = $from.depth; depth > 0; depth--) {
-        if ($from.node(depth).type.name === "columns") {
-          inColumns = true
-          const { view } = editor
-          const domAtPos = view.domAtPos(from)
-          const columnsEl =
-            (domAtPos.node as HTMLElement)?.closest?.(".columns-layout") ||
-            (domAtPos.node.parentElement as HTMLElement)?.closest?.(
-              ".columns-layout"
-            )
-
-          if (columnsEl) {
-            const rect = columnsEl.getBoundingClientRect()
-            setColumnsMenuPos({
-              top: rect.top - 44,
-              left: rect.left + rect.width / 2,
-            })
-          }
-          break
-        }
-      }
-      setIsInColumns(inColumns)
-      if (!inColumns) setColumnsMenuPos(null)
-
-      if (from === to) {
-        setBubbleMenuPos(null)
-        return
-      }
-
-      const { view } = editor
-      const start = view.coordsAtPos(from)
-      const end = view.coordsAtPos(to)
-
-      setBubbleMenuPos({
-        top: start.top - 50,
-        left: (start.left + end.left) / 2,
-      })
     },
     onBlur: () => {
       setTimeout(() => {
@@ -220,6 +243,7 @@ export function Editor({
       editor.setEditable(editable)
     }
   }, [editor, editable])
+
 
   // === Polling: karşı tarafın değişikliklerini 3 saniyede bir kontrol et ===
   useEffect(() => {
@@ -368,6 +392,8 @@ export function Editor({
       )}
 
       <DragHandleReact editor={editor} containerRef={editorContainerRef} />
+      <TableRowResize editor={editor} />
+      <ColumnResize editor={editor} />
 
       <EditorContent editor={editor} />
 

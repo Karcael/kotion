@@ -109,10 +109,13 @@ export function Sidebar({ user }: SidebarProps) {
       >
         {/* Üst bölüm: Logo + Daralt */}
         <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-foreground/80">
+          <button
+            onClick={() => router.push("/documents")}
+            className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-foreground/80 transition-colors hover:text-foreground"
+          >
             <Logo size={20} />
             <span>Kotion</span>
-          </div>
+          </button>
           <button
             onClick={close}
             className="rounded-md p-1 text-muted-foreground opacity-0 transition-all hover:bg-foreground/5 hover:text-foreground group-hover/sidebar:opacity-100"
@@ -174,7 +177,7 @@ export function Sidebar({ user }: SidebarProps) {
         {/* Sürüm bilgisi */}
         <div className="px-5 py-1.5">
           <span className="text-[10px] font-medium tracking-wider text-muted-foreground/40">
-            Kotion v1.3.2
+            Kotion v1.4.0
           </span>
         </div>
 

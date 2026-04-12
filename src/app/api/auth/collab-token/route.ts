@@ -11,7 +11,7 @@ export async function GET() {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const token = await new SignJWT({
@@ -29,7 +29,7 @@ export async function GET() {
   } catch (error) {
     console.error("Collab token error:", error)
     return NextResponse.json(
-      { error: "Token oluşturulurken bir hata oluştu" },
+      { error: "Token oluşturulurken bir hata oluştu." },
       { status: 500 }
     )
   }

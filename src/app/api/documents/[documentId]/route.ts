@@ -10,7 +10,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { documentId } = await params
@@ -18,7 +18,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
     if (!access) {
       return NextResponse.json(
-        { error: "Doküman bulunamadı" },
+        { error: "Doküman bulunamadı." },
         { status: 404 }
       )
     }
@@ -27,7 +27,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Get document error:", error)
     return NextResponse.json(
-      { error: "Doküman alınırken bir hata oluştu" },
+      { error: "Doküman alınırken bir hata oluştu." },
       { status: 500 }
     )
   }
@@ -38,7 +38,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { documentId } = await params
@@ -47,7 +47,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     if (!access) {
       return NextResponse.json(
-        { error: "Doküman bulunamadı" },
+        { error: "Doküman bulunamadı." },
         { status: 404 }
       )
     }
@@ -55,7 +55,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // VIEWER düzenleyemez
     if (access.role === "VIEWER") {
       return NextResponse.json(
-        { error: "Düzenleme yetkiniz yok" },
+        { error: "Düzenleme yetkiniz yok." },
         { status: 403 }
       )
     }
@@ -66,7 +66,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       for (const field of ownerOnlyFields) {
         if (field in body) {
           return NextResponse.json(
-            { error: "Bu işlem için sahip olmanız gerekiyor" },
+            { error: "Bu işlem için sahip olmanız gerekiyor." },
             { status: 403 }
           )
         }
@@ -107,7 +107,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Update document error:", error)
     return NextResponse.json(
-      { error: "Doküman güncellenirken bir hata oluştu" },
+      { error: "Doküman güncellenirken bir hata oluştu." },
       { status: 500 }
     )
   }
@@ -118,7 +118,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { documentId } = await params
@@ -126,14 +126,14 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     if (!access) {
       return NextResponse.json(
-        { error: "Doküman bulunamadı" },
+        { error: "Doküman bulunamadı." },
         { status: 404 }
       )
     }
 
     if (access.role !== "OWNER") {
       return NextResponse.json(
-        { error: "Silme yetkisi sadece sayfa sahibine aittir" },
+        { error: "Silme yetkisi sadece sayfa sahibine aittir." },
         { status: 403 }
       )
     }
@@ -144,7 +144,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Delete document error:", error)
     return NextResponse.json(
-      { error: "Doküman silinirken bir hata oluştu" },
+      { error: "Doküman silinirken bir hata oluştu." },
       { status: 500 }
     )
   }

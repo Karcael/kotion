@@ -9,14 +9,14 @@ export async function POST(request: Request) {
 
     if (!name || !email || !password) {
       return NextResponse.json(
-        { error: "Tüm alanları doldurun" },
+        { error: "Tüm alanları doldurun." },
         { status: 400 }
       )
     }
 
     if (password.length < 6) {
       return NextResponse.json(
-        { error: "Şifre en az 6 karakter olmalıdır" },
+        { error: "Şifre en az 6 karakter olmalıdır." },
         { status: 400 }
       )
     }
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Bu e-posta adresi zaten kullanılıyor" },
+        { error: "Bu e-posta adresi zaten kullanılıyor." },
         { status: 409 }
       )
     }
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Register error:", error)
     return NextResponse.json(
-      { error: "Kayıt sırasında bir hata oluştu" },
+      { error: "Kayıt sırasında bir hata oluştu." },
       { status: 500 }
     )
   }

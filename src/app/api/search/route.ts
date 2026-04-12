@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("Search error:", error)
     return NextResponse.json(
-      { error: "Arama sırasında bir hata oluştu" },
+      { error: "Arama sırasında bir hata oluştu." },
       { status: 500 }
     )
   }

@@ -21,7 +21,7 @@ export function MainLayout({ user, children }: MainLayoutProps) {
     <div className="flex h-screen">
       <Sidebar user={user} />
       <main
-        className="flex-1 overflow-y-auto transition-[margin-left] duration-200"
+        className="main-content flex-1 overflow-x-hidden overflow-y-auto transition-[margin-left] duration-200"
         style={{ marginLeft: isOpen ? `${width}px` : 0 }}
       >
         <SearchCommand />

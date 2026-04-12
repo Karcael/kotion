@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -71,7 +71,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("List documents error:", error)
     return NextResponse.json(
-      { error: "Dokümanlar alınırken bir hata oluştu" },
+      { error: "Dokümanlar alınırken bir hata oluştu." },
       { status: 500 }
     )
   }
@@ -82,17 +82,19 @@ export async function POST(request: Request) {
   try {
     const user = await getSession()
     if (!user) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 })
+      return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 })
     }
 
     const body = await request.json()
-    const { title, parentId } = body
+    const { title, parentId, content, icon } = body
 
     const document = await prisma.document.create({
       data: {
         title: title || "Adsız",
         parentId: parentId || null,
         userId: user.id,
+        ...(content ? { content } : {}),
+        ...(icon ? { icon } : {}),
       },
     })
 
@@ -100,7 +102,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Create document error:", error)
     return NextResponse.json(
-      { error: "Doküman oluşturulurken bir hata oluştu" },
+      { error: "Doküman oluşturulurken bir hata oluştu." },
       { status: 500 }
     )
   }

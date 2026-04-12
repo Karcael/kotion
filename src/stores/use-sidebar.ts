@@ -1,4 +1,5 @@
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
 interface SidebarStore {
   isOpen: boolean
@@ -13,15 +14,23 @@ interface SidebarStore {
   refresh: () => void
 }
 
-export const useSidebar = create<SidebarStore>((set) => ({
-  isOpen: true,
-  isResizing: false,
-  width: 240,
-  refreshKey: 0,
-  open: () => set({ isOpen: true }),
-  close: () => set({ isOpen: false }),
-  toggle: () => set((state) => ({ isOpen: !state.isOpen })),
-  setIsResizing: (isResizing) => set({ isResizing }),
-  setWidth: (width) => set({ width }),
-  refresh: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
-}))
+export const useSidebar = create<SidebarStore>()(
+  persist(
+    (set) => ({
+      isOpen: true,
+      isResizing: false,
+      width: 240,
+      refreshKey: 0,
+      open: () => set({ isOpen: true }),
+      close: () => set({ isOpen: false }),
+      toggle: () => set((state) => ({ isOpen: !state.isOpen })),
+      setIsResizing: (isResizing) => set({ isResizing }),
+      setWidth: (width) => set({ width }),
+      refresh: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
+    }),
+    {
+      name: "kotion-sidebar",
+      partialize: (state) => ({ width: state.width }),
+    },
+  ),
+)

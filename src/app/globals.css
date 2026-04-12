@@ -83,6 +83,16 @@
   border-color: var(--border-c);
 }
 
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/* Main content area: container query context for table width */
+.main-content {
+  container-type: inline-size;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -277,6 +287,36 @@ body {
   margin: 1em 0;
 }
 
+/* Code block wrapper with toolbar */
+.ProseMirror .code-block-wrapper {
+  position: relative;
+  margin: 1em 0;
+}
+
+.ProseMirror .code-block-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.375rem 0.75rem;
+  background: var(--muted-bg);
+  border: 1px solid var(--border-c);
+  border-bottom: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.ProseMirror .code-block-wrapper pre {
+  background: var(--muted-bg);
+  border-radius: 0 0 0.5rem 0.5rem;
+  padding: 0.75rem 1rem;
+  font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.85em;
+  overflow-x: auto;
+  line-height: 1.6;
+  border: 1px solid var(--border-c);
+  border-top: 1px solid var(--border-c);
+  margin: 0;
+}
+
 .ProseMirror pre {
   background: var(--muted-bg);
   border-radius: 0.5rem;
@@ -427,23 +467,32 @@ body {
   color: var(--muted-fg);
 }
 
-/* Tablo */
+/* Table: scrollable wrapper — uses container query to span full main width */
+.ProseMirror .tableWrapper {
+  --tw: calc(100cqw - 6rem);
+  width: var(--tw);
+  max-width: var(--tw);
+  margin-left: calc((100% - var(--tw)) / 2 - 54px);
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 0 1rem 0.5rem 1rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
 .ProseMirror table {
   border-collapse: collapse;
-  width: 100%;
-  margin: 1em 0;
+  margin: 0 auto;
   border-radius: 0.5rem;
-  overflow: hidden;
 }
 
 .ProseMirror th,
 .ProseMirror td {
   border: 1px solid var(--border-c);
   padding: 0.5rem 0.75rem;
-  text-align: left;
-  min-width: 80px;
+  min-width: 60px;
   position: relative;
-  vertical-align: top;
+  box-sizing: border-box;
 }
 
 .ProseMirror th {
@@ -452,7 +501,12 @@ body {
   font-size: 0.875em;
 }
 
-/* Seçili hücre vurgusu */
+/* Zebra striping: alternate row colors */
+.ProseMirror tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--muted-bg) 40%, transparent);
+}
+
+/* Selected cell highlight */
 .ProseMirror .selectedCell::after {
   content: "";
   position: absolute;
@@ -463,7 +517,7 @@ body {
   z-index: 1;
 }
 
-/* Tablo boyutlandırma tutamacı */
+/* Column resize handle */
 .ProseMirror .column-resize-handle {
   position: absolute;
   right: -2px;
@@ -472,12 +526,33 @@ body {
   width: 4px;
   background-color: var(--accent-c);
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.6;
   border-radius: 2px;
 }
 
 .ProseMirror.resize-cursor {
   cursor: col-resize;
+}
+
+/* Row resize: bottom border hover zone on cells */
+.ProseMirror td.row-resize-active,
+.ProseMirror th.row-resize-active {
+  cursor: row-resize;
+}
+
+.ProseMirror tr.row-resizing td::after,
+.ProseMirror tr.row-resizing th::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 3px;
+  background: var(--accent-c);
+  opacity: 0.6;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* ======== İşbirliği İmleçleri ======== */
@@ -507,11 +582,15 @@ body {
   font-family: inherit;
 }
 
-/* ======== Sütun Düzeni ======== */
+/* ======== Column Layout ======== */
 .ProseMirror .columns-layout {
+  --cols-w: calc(100cqw - 18rem);
   display: grid;
   gap: 1rem;
-  margin: 1em -54px;
+  width: var(--cols-w);
+  margin-left: calc((100% - var(--cols-w)) / 2 - 54px);
+  margin-top: 1em;
+  margin-bottom: 1em;
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px dashed transparent;
@@ -522,24 +601,25 @@ body {
   border-color: var(--border-c);
 }
 
+/* Default equal-width columns (when no inline style is set via widths attr) */
 .ProseMirror .columns-layout[data-columns="2"] {
   grid-template-columns: 1fr 1fr;
 }
-
 .ProseMirror .columns-layout[data-columns="3"] {
   grid-template-columns: 1fr 1fr 1fr;
 }
-
 .ProseMirror .columns-layout[data-columns="4"] {
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
+/* When inline style is set by widths attribute, it overrides the above */
 
 .ProseMirror .column-block {
   min-height: 2rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 0.375rem;
   border: 1px solid transparent;
   transition: border-color 0.2s, background-color 0.2s;
+  overflow: hidden;
 }
 
 .ProseMirror .column-block:hover {
@@ -560,22 +640,18 @@ body {
   margin-bottom: 0;
 }
 
-/* Mobil: sütunları üst üste yığ */
+/* Mobile: stack columns */
 @media (max-width: 768px) {
-  .ProseMirror .columns-layout[data-columns="2"],
-  .ProseMirror .columns-layout[data-columns="3"],
-  .ProseMirror .columns-layout[data-columns="4"] {
-    grid-template-columns: 1fr;
-  }
-
   .ProseMirror .columns-layout {
+    grid-template-columns: 1fr !important;
+    width: auto;
     margin-left: 0;
     margin-right: 0;
     gap: 0.5rem;
   }
 }
 
-/* Tablet: 3-4 sütunu 2'ye düşür */
+/* Tablet: reduce 3-4 columns to 2 */
 @media (min-width: 769px) and (max-width: 1024px) {
   .ProseMirror .columns-layout[data-columns="3"],
   .ProseMirror .columns-layout[data-columns="4"] {

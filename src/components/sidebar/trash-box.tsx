@@ -48,22 +48,22 @@ export function TrashBox({ onClose }: TrashBoxProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isArchived: false }),
       })
-      toast.success("Sayfa geri yüklendi")
+      toast.success("Sayfa geri yüklendi.")
       refresh()
       fetchTrash()
     } catch {
-      toast.error("Geri yükleme başarısız")
+      toast.error("Geri yükleme başarısız.")
     }
   }
 
   const handleDelete = async (id: string) => {
     try {
       await fetch(`/api/documents/${id}`, { method: "DELETE" })
-      toast.success("Sayfa kalıcı olarak silindi")
+      toast.success("Sayfa kalıcı olarak silindi.")
       refresh()
       fetchTrash()
     } catch {
-      toast.error("Silme başarısız")
+      toast.error("Silme başarısız.")
     }
   }
 
@@ -116,7 +116,7 @@ export function TrashBox({ onClose }: TrashBoxProps) {
             <div className="py-8 text-center">
               <Trash2 className="mx-auto h-8 w-8 text-muted-foreground/30" />
               <p className="mt-2 text-sm text-muted-foreground">
-                Çöp kutusu boş
+                Çöp kutusu boş.
               </p>
             </div>
           ) : (

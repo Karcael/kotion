@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from "@tiptap/core"
 
-// Sütun kapsayıcı düğümü
+// Column container node
 export const Columns = Node.create({
   name: "columns",
   group: "block",
@@ -17,6 +17,20 @@ export const Columns = Node.create({
         renderHTML: (attributes) => ({
           "data-columns": attributes.count,
         }),
+      },
+      widths: {
+        default: null,
+        parseHTML: (element) => {
+          const w = element.getAttribute("data-widths")
+          return w ? JSON.parse(w) : null
+        },
+        renderHTML: (attributes) => {
+          if (!attributes.widths) return {}
+          return {
+            "data-widths": JSON.stringify(attributes.widths),
+            style: `grid-template-columns: ${attributes.widths.map((w: number) => `${w}%`).join(" ")}`,
+          }
+        },
       },
     }
   },
@@ -37,7 +51,7 @@ export const Columns = Node.create({
   },
 })
 
-// Tek sütun düğümü
+// Single column node
 export const Column = Node.create({
   name: "column",
   content: "block+",
@@ -53,7 +67,7 @@ export const Column = Node.create({
   },
 })
 
-// Sütun oluşturma yardımcısı
+// Helper to create columns content
 export function createColumnsContent(count: number) {
   const columns = []
   for (let i = 0; i < count; i++) {

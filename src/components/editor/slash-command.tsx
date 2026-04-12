@@ -46,7 +46,7 @@ interface CommandItem {
 const commands: CommandItem[] = [
   {
     title: "Metin",
-    description: "Normal metin paragrafı",
+    description: "Normal metin paragrafı.",
     icon: AlignLeft,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode("paragraph").run()
@@ -54,7 +54,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Başlık 1",
-    description: "Büyük başlık",
+    description: "Büyük başlık.",
     icon: Heading1,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode("heading", { level: 1 }).run()
@@ -62,7 +62,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Başlık 2",
-    description: "Orta başlık",
+    description: "Orta başlık.",
     icon: Heading2,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode("heading", { level: 2 }).run()
@@ -70,7 +70,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Başlık 3",
-    description: "Küçük başlık",
+    description: "Küçük başlık.",
     icon: Heading3,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode("heading", { level: 3 }).run()
@@ -78,7 +78,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Madde Listesi",
-    description: "Sırasız madde listesi",
+    description: "Sırasız madde listesi.",
     icon: List,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run()
@@ -86,7 +86,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Sıralı Liste",
-    description: "Numaralı liste",
+    description: "Numaralı liste.",
     icon: ListOrdered,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run()
@@ -94,7 +94,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Yapılacaklar",
-    description: "Onay kutusu listesi",
+    description: "Onay kutusu listesi.",
     icon: CheckSquare,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run()
@@ -102,7 +102,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Kod Bloğu",
-    description: "Söz dizimi vurgulu kod",
+    description: "Söz dizimi vurgulu kod.",
     icon: Code,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
@@ -110,7 +110,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Alıntı",
-    description: "Alıntı bloğu",
+    description: "Alıntı bloğu.",
     icon: Quote,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run()
@@ -118,7 +118,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Ayırıcı",
-    description: "Yatay ayırıcı çizgi",
+    description: "Yatay ayırıcı çizgi.",
     icon: Minus,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setHorizontalRule().run()
@@ -126,7 +126,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Görsel",
-    description: "Dosya yükle veya URL ile ekle",
+    description: "Dosya yükle veya URL ile ekle.",
     icon: ImageIcon,
     command: ({ editor, range, onImageRequest }) => {
       if (onImageRequest) {
@@ -141,7 +141,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Sayfa Bağlantısı",
-    description: "Başka bir sayfaya bağlantı ekle",
+    description: "Başka bir sayfaya bağlantı ekle.",
     icon: FileText,
     command: ({ range, onPageLinkRequest }) => {
       if (onPageLinkRequest) {
@@ -151,7 +151,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Tablo",
-    description: "3x3 tablo ekle",
+    description: "3x3 tablo ekle.",
     icon: Table,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
@@ -159,7 +159,7 @@ const commands: CommandItem[] = [
   },
   {
     title: "Sütunlar",
-    description: "İçeriği sütunlara böl",
+    description: "İçeriği sütunlara böl.",
     icon: Columns3,
     // hasSubmenu işareti — CommandList'te alt menü gösterecek
     command: () => {},
@@ -269,7 +269,7 @@ const CommandList = forwardRef<CommandListRef, CommandListProps>(
     if (items.length === 0) {
       return (
         <div className="overflow-hidden rounded-2xl border border-border/50 bg-popover p-3 shadow-2xl">
-          <p className="text-sm text-muted-foreground">Sonuç bulunamadı</p>
+          <p className="text-sm text-muted-foreground">Sonuç bulunamadı.</p>
         </div>
       )
     }

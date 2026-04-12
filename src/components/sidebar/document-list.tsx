@@ -151,7 +151,7 @@ export function DocumentList({
   if (documents.length === 0 && level === 0) {
     return (
       <p className="px-5 py-2 text-xs text-muted-foreground">
-        {type === "favorites" ? "Favori sayfa yok" : "Sayfa yok"}
+        {type === "favorites" ? "Favori sayfa yok." : "Sayfa yok."}
       </p>
     )
   }

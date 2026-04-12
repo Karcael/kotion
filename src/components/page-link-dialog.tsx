@@ -137,7 +137,7 @@ export function PageLinkDialog({ onSelect, onClose }: PageLinkDialogProps) {
             </div>
           ) : filtered.length === 0 ? (
             <p className="px-4 py-6 text-center text-sm text-muted-foreground">
-              {query ? "Sonuç bulunamadı" : "Henüz sayfa yok"}
+              {query ? "Sonuç bulunamadı." : "Henüz sayfa yok."}
             </p>
           ) : (
             filtered.map((page, index) => {

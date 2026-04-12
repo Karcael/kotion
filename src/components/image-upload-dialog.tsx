@@ -77,7 +77,7 @@ export function ImageUploadDialog({
           setError(data.error || "Yükleme başarısız")
         }
       } catch {
-        setError("Yükleme sırasında bir hata oluştu")
+        setError("Yükleme sırasında bir hata oluştu.")
       } finally {
         setUploading(false)
       }

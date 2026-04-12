@@ -18,6 +18,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.addEventListener('error',function(e){if(e.error instanceof RangeError&&e.error.message.indexOf('Position')!==-1){e.preventDefault();e.stopImmediatePropagation();}},true);`,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
