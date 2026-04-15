@@ -3,9 +3,17 @@
 import { Node, mergeAttributes } from "@tiptap/core"
 import { ReactNodeViewRenderer, NodeViewWrapper, type ReactNodeViewProps } from "@tiptap/react"
 import { PageIcon } from "@/components/page-icon"
+import { useDocumentMeta } from "@/stores/use-document-meta"
 
 function PageLinkView({ node }: ReactNodeViewProps) {
-  const { pageId, title, icon } = node.attrs
+  const { pageId, title: snapshotTitle, icon: snapshotIcon } = node.attrs
+
+  const meta = useDocumentMeta(pageId, {
+    title: snapshotTitle ?? "",
+    icon: snapshotIcon ?? null,
+  })
+
+  const displayTitle = meta.title?.trim() ? meta.title : "Adsız"
 
   return (
     <NodeViewWrapper data-type="page-link" className="page-link-block">
@@ -15,9 +23,9 @@ function PageLinkView({ node }: ReactNodeViewProps) {
         data-page-navigate={pageId}
       >
         <span className="page-link-icon">
-          <PageIcon icon={icon} size={18} />
+          <PageIcon icon={meta.icon} size={18} />
         </span>
-        <span className="page-link-title">{title || "Adsız"}</span>
+        <span className="page-link-title">{displayTitle}</span>
         <span className="page-link-arrow">{"\u2192"}</span>
       </a>
     </NodeViewWrapper>

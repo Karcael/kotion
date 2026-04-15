@@ -177,7 +177,7 @@ export function Sidebar({ user }: SidebarProps) {
         {/* Sürüm bilgisi */}
         <div className="px-5 py-1.5">
           <span className="text-[10px] font-medium tracking-wider text-muted-foreground/40">
-            Kotion v1.4.0
+            Kotion v1.4.1
           </span>
         </div>
 

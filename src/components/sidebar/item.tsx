@@ -94,9 +94,9 @@ export function Item({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && onClick?.()}
-      style={{ paddingLeft: `${12 + level * 16}px` }}
+      style={{ paddingLeft: `${8 + level * 14}px` }}
       className={`
-        group relative flex w-full items-center gap-1 rounded-lg py-[5px] pr-2 text-[13px] transition-colors
+        group relative flex w-full items-center rounded-lg py-[5px] pr-1.5 text-[13px] transition-colors
         ${
           active
             ? "bg-foreground/[0.06] font-medium text-foreground"
@@ -104,41 +104,46 @@ export function Item({
         }
       `}
     >
-      {hasChildren !== undefined && (
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={(e) => {
-            e.stopPropagation()
-            onExpand?.()
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
+      <div className="relative mr-1.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center">
+        <span
+          className={`flex items-center justify-center transition-opacity ${
+            hasChildren ? "group-hover:opacity-0" : ""
+          }`}
+        >
+          {icon ? (
+            <PageIcon icon={icon} size={16} />
+          ) : DocumentIcon ? (
+            <DocumentIcon className="h-[15px] w-[15px] opacity-60" />
+          ) : null}
+        </span>
+        {hasChildren && (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={(e) => {
               e.stopPropagation()
               onExpand?.()
-            }
-          }}
-          className="mr-0.5 rounded-md p-0.5 transition-colors hover:bg-foreground/10"
-        >
-          <ChevronRight
-            className={`h-3.5 w-3.5 transition-transform duration-150 ${
-              expanded ? "rotate-90" : ""
-            }`}
-          />
-        </div>
-      )}
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.stopPropagation()
+                onExpand?.()
+              }
+            }}
+            className="absolute inset-0 flex items-center justify-center rounded-md opacity-0 transition-all hover:bg-foreground/10 group-hover:opacity-100"
+          >
+            <ChevronRight
+              className={`h-3.5 w-3.5 transition-transform duration-150 ${
+                expanded ? "rotate-90" : ""
+              }`}
+            />
+          </div>
+        )}
+      </div>
 
-      {icon ? (
-        <span className="mr-1.5 shrink-0">
-          <PageIcon icon={icon} size={16} />
-        </span>
-      ) : DocumentIcon ? (
-        <DocumentIcon className="mr-1.5 h-[15px] w-[15px] shrink-0 opacity-60" />
-      ) : null}
+      <span className="min-w-0 flex-1 truncate">{label}</span>
 
-      <span className="truncate">{label}</span>
-
-      <div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+      <div className="ml-1 flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
         <div className="relative" ref={menuRef}>
           <button
             onClick={(e) => {

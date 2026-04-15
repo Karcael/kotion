@@ -7,6 +7,7 @@ import { ImageUploadDialog } from "./image-upload-dialog"
 import { ShareDialog } from "./share-dialog"
 import { Title } from "./title"
 import { PageIcon, parseIcon } from "./page-icon"
+import { useSidebar } from "@/stores/use-sidebar"
 
 interface ToolbarProps {
   document: {
@@ -23,6 +24,7 @@ export function Toolbar({ document, onUpdate }: ToolbarProps) {
   const [showIconImageUpload, setShowIconImageUpload] = useState(false)
   const [showCoverUpload, setShowCoverUpload] = useState(false)
   const [showShareDialog, setShowShareDialog] = useState(false)
+  const setTitleOverride = useSidebar((s) => s.setTitleOverride)
 
   return (
     <div className="relative pb-4 pt-10">
@@ -96,6 +98,7 @@ export function Toolbar({ document, onUpdate }: ToolbarProps) {
       <Title
         initialTitle={document.title}
         onChange={(title) => onUpdate({ title })}
+        onInstantChange={(title) => setTitleOverride(document.id, title)}
       />
 
       {/* Emoji ikon seçici */}

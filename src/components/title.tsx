@@ -7,9 +7,10 @@ import { useDebounce } from "@/hooks/use-debounce"
 interface TitleProps {
   initialTitle: string
   onChange: (title: string) => void
+  onInstantChange?: (title: string) => void
 }
 
-export function Title({ initialTitle, onChange }: TitleProps) {
+export function Title({ initialTitle, onChange, onInstantChange }: TitleProps) {
   const [title, setTitle] = useState(initialTitle)
   const debouncedTitle = useDebounce(title, 500)
   const onChangeRef = useRef(onChange)
@@ -34,7 +35,10 @@ export function Title({ initialTitle, onChange }: TitleProps) {
   return (
     <TextareaAutosize
       value={title}
-      onChange={(e) => setTitle(e.target.value)}
+      onChange={(e) => {
+        setTitle(e.target.value)
+        onInstantChange?.(e.target.value)
+      }}
       placeholder="Adsız"
       className="w-full resize-none break-words bg-transparent text-4xl font-bold outline-none placeholder:text-foreground/25"
       onKeyDown={(e) => {

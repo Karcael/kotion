@@ -94,14 +94,11 @@ export default function DocumentPage() {
     async (updates: Partial<Document>) => {
       if (!documentId) return
 
-      if (
+      const needsRefresh =
         "title" in updates ||
         "icon" in updates ||
         "isArchived" in updates ||
         "isFavorite" in updates
-      ) {
-        refreshRef.current()
-      }
 
       setDocument((prev) => (prev ? { ...prev, ...updates } : null))
 
@@ -113,6 +110,13 @@ export default function DocumentPage() {
         })
         if (res.status === 401) {
           setSessionExpired(true)
+          return
+        }
+        if (needsRefresh) {
+          refreshRef.current()
+          if ("title" in updates) {
+            useSidebar.getState().clearTitleOverride(documentId)
+          }
         }
       } catch (error) {
         console.error("Failed to update document:", error)

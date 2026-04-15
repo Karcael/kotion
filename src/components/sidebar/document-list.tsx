@@ -29,6 +29,7 @@ export function DocumentList({
   const params = useParams()
   const router = useRouter()
   const { refreshKey, refresh } = useSidebar()
+  const titleOverrides = useSidebar((s) => s.titleOverrides)
   const [documents, setDocuments] = useState<Document[]>([])
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
   const [loading, setLoading] = useState(true)
@@ -157,7 +158,7 @@ export function DocumentList({
   }
 
   return (
-    <div className="px-3">
+    <div className={level === 0 ? "px-3" : ""}>
       {documents.map((doc, index) => (
         <div
           key={doc.id}
@@ -176,7 +177,7 @@ export function DocumentList({
         >
           <Item
             id={doc.id}
-            label={doc.title}
+            label={titleOverrides[doc.id] ?? doc.title}
             icon={doc.icon || undefined}
             documentIcon={!doc.icon ? FileIcon : undefined}
             active={params?.documentId === doc.id}
